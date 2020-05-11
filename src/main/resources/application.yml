@@ -1,0 +1,15 @@
+spring:
+  profiles:
+    active: sharding
+
+#mybatis-plus框架配置
+mybatis-plus:
+  mapper-locations: classpath:mapper/*.xml
+  #别名设置 默认类名 类名首字母小写
+  type-aliases-package: com.github.davidfantasy.shardingjdbcdemo.model,com.github.davidfantasy.shardingjdbcdemo.dto
+
+logging:
+  level:
+    root: info
+
+

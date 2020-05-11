@@ -1,0 +1,37 @@
+#sharding-jdbc配置
+spring:
+  shardingsphere:
+    props:
+      sql:
+        show: true
+    datasource:
+      names: ds0
+      ds0:
+        type: com.zaxxer.hikari.HikariDataSource
+        driver-class-name: com.mysql.cj.jdbc.Driver
+        jdbc-url: jdbc:mysql://192.168.1.211:3306/sharding-db-1?useUnicode=true&characterEncoding=utf8&allowMultiQueries=true
+        username: root
+        password: root
+    sharding:
+      # 配置绑定表，每一行为一组
+      binding-tables:
+        - t_order,t_order_good
+      tables:
+        t_order:
+          actual-data-nodes: ds$->{0}.t_order_$->{0..2}
+          table-strategy:
+            inline:
+              sharding-column: id
+              algorithm-expression: t_order_$->{id % 3}
+              key-generator:
+                column: id
+                type: SNOWFLAKE
+        t_order_good:
+          actual-data-nodes: ds$->{0}.t_order_good_$->{0..2}
+          table-strategy:
+            inline:
+              sharding-column: order_id
+              algorithm-expression: t_order_good_$->{order_id % 3}
+              key-generator:
+                column: id
+                type: SNOWFLAKE
